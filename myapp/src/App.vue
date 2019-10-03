@@ -1,28 +1,27 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-10-01 12:47:46
+ * @LastEditTime: 2019-10-03 21:16:03
+ * @LastEditors: Please set LastEditors
+ -->
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <index></index>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
+import index from "./pages/index.vue";
 export default {
-  name: 'app',
   components: {
-    HelloWorld
+    index
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+*{
+  padding: 0;
+  margin: 0;
 }
 </style>
