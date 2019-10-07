@@ -2,10 +2,11 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-10-03 20:18:43
- * @LastEditTime: 2019-10-06 17:27:40
+ * @LastEditTime: 2019-10-07 22:11:29
  * @LastEditors: Please set LastEditors
  -->
 <template>
+<div id="app">
   <div id="jzbox">
     <header>
       <div class="headerbox">
@@ -40,17 +41,17 @@
         <div class="laba">
           <img src="../assets/img/new1.png" alt />
         </div>
-        <ul class="tips">
-          <transition>
-            <li class="tip tip1" v-bind="move()" :style="transform">
+        <ul class="tips" ref="tips">
+          <!-- <transition> -->
+            <li ref="tip1" class="tip" :style="transform">
               <a href="###">关于最新城乡医保的分析通知</a>
             </li>
-          </transition>
-          <transition>
-            <li class="tip tip2" v-bind="move()">
+          <!-- </transition> -->
+          <!-- <transition> -->
+            <li class="tip">
               <a href="###">什么是五险一金</a>
             </li>
-          </transition>
+          <!-- </transition> -->
         </ul>
       </div>
       <div class="colee"></div>
@@ -141,10 +142,14 @@
             <i class="el-icon-chat-dot-round"></i>
             <p class="foot-font" @click="weixin">关注微信</p>
           </li>
+         
           <li class="foot-btn">
+           <router-link :to="{path:'/sheBao'}" target='_blank'> 
             <i class="el-icon-takeaway-box"></i>
             <p class="foot-font">在线缴社保</p>
+            </router-link>
           </li>
+          
           <li class="foot-btn">
             <i class="el-icon-phone"></i>
             <p class="foot-font">免费热线</p>
@@ -159,6 +164,7 @@
         <img src="../assets/img/wxcode1.jpg" alt />
       </div>
     </div>
+  </div>
   </div>
 </template>
 <script>
@@ -257,7 +263,8 @@ export default {
   },
   methods: {
     shiftTitle: function() {
-      this.style.top = -20 + "rem";
+      console.log(this.$refs.tips)
+      this.$refs.tip1.style.top = -2+'rem';
     },
     move: function() {
       setInterval(() => {
@@ -297,13 +304,18 @@ export default {
         this.$refs.wx.style.display = "none";
         this.wxerweima = true;
       }
+    },
+    sheBao(){
+      // this.$router.push({path:'/sheBao'})
     }
   },
   mounted() {
     this.getData();
     this.animate();
   },
-  created() {}
+  created() {
+    this.shiftTitle()
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -645,6 +657,7 @@ li {
       }
     }
     .weixinImg {
+      
       display: none;
       position: absolute;
       top: 0;
