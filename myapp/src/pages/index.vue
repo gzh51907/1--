@@ -2,11 +2,13 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-10-03 20:18:43
- * @LastEditTime: 2019-10-07 22:11:29
+ * @LastEditTime: 2019-10-08 21:57:30
  * @LastEditors: Please set LastEditors
  -->
 <template>
+<!-- <router-view> -->
 <div id="app">
+
   <div id="jzbox">
     <header>
       <div class="headerbox">
@@ -41,14 +43,14 @@
         <div class="laba">
           <img src="../assets/img/new1.png" alt />
         </div>
-        <ul class="tips" ref="tips">
+        <ul class="tips" ref="tips" style="overflow:hidden">
           <!-- <transition> -->
-            <li ref="tip1" class="tip" :style="transform">
+            <li ref="tip1" class="tip" style="transform:translateY(-2rem)">
               <a href="###">关于最新城乡医保的分析通知</a>
             </li>
           <!-- </transition> -->
           <!-- <transition> -->
-            <li class="tip">
+            <li class="tip" style="transform:translateY(-4rem)">
               <a href="###">什么是五险一金</a>
             </li>
           <!-- </transition> -->
@@ -144,7 +146,7 @@
           </li>
          
           <li class="foot-btn">
-           <router-link :to="{path:'/sheBao'}" target='_blank'> 
+           <router-link to="/sheBao"> 
             <i class="el-icon-takeaway-box"></i>
             <p class="foot-font">在线缴社保</p>
             </router-link>
@@ -155,8 +157,10 @@
             <p class="foot-font">免费热线</p>
           </li>
           <li class="foot-btn">
+            <router-link to='/kefu'>
             <i class="el-icon-user-solid"></i>
             <p class="foot-font">在线客服</p>
+            </router-link>
           </li>
         </ul>
       </footer>
@@ -165,7 +169,11 @@
       </div>
     </div>
   </div>
+  
   </div>
+
+
+
 </template>
 <script>
 import Vue from "vue";
@@ -173,6 +181,8 @@ import ElementUI from "element-ui";
 import axios from "axios";
 import "element-ui/lib/theme-chalk/index.css";
 import Tab from "../components/tabs.vue";
+
+Vue.prototype.$axios = axios;
 
 Vue.use(ElementUI);
 
@@ -263,8 +273,8 @@ export default {
   },
   methods: {
     shiftTitle: function() {
-      console.log(this.$refs.tips)
-      this.$refs.tip1.style.top = -2+'rem';
+      // console.log(this.$refs.tips)
+      // this.$refs.tip1.style.top = -2+'rem';
     },
     move: function() {
       setInterval(() => {
@@ -305,9 +315,9 @@ export default {
         this.wxerweima = true;
       }
     },
-    sheBao(){
-      // this.$router.push({path:'/sheBao'})
-    }
+    // toShebao(){
+    //  window.location.href = './pages/shebao.vue'
+    // }
   },
   mounted() {
     this.getData();
@@ -654,6 +664,9 @@ li {
             font-size: 0.4rem;
           }
         }
+        a{
+          color:#fff;
+        } 
       }
     }
     .weixinImg {

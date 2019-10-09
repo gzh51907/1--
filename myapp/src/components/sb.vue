@@ -1,13 +1,19 @@
 <!--
  * @Description: In User Settings Edit
  * @Author: your name
+ * @Date: 2019-10-08 09:52:55
+ * @LastEditTime: 2019-10-08 09:58:27
+ * @LastEditors: Please set LastEditors
+ -->
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
  * @Date: 2019-09-30 09:45:18
- * @LastEditTime: 2019-10-09 15:38:23
+ * @LastEditTime: 2019-10-07 21:43:19
  * @LastEditors: Please set LastEditors
  -->
 <template>
   <div id="app">
-    <!-- <router-view> -->
     <div class="index">
       <header class="bar bar-nav">
         <h1 class="title">桔子保</h1>
@@ -106,37 +112,37 @@
             <p>工作随意换 社保不要断</p>
           </div>
         </div>
-      </div>
-    </div>
-    <!-- </router-view> -->
-    <div class="footer">
-      <div class="footer_list">
-        <div class="footer_item" @click="toIndex">
-          <div class="footer_icon">
-            <i class="el-icon-s-home"></i>
+        <div class="footer">
+          <div class="footer_list">
+            <div class="footer_item active">
+              <div class="footer_icon">
+                <i class="el-icon-s-home"></i>
+              </div>
+              <div class="footer_text">首页</div>
+            </div>
+            <div class="footer_item">
+              <div class="footer_icon">
+                <i class="el-icon-s-order"></i>
+              </div>
+              <div class="footer_text">社保</div>
+            </div>
+            <div class="footer_item">
+              <div class="footer_icon">
+                <i class="el-icon-s-platform"></i>
+              </div>
+              <div class="footer_text">计算器</div>
+            </div>
+          <!-- <router-link> -->
+            <div class="footer_item" @click="tomy()">
+              
+              <div class="footer_icon">
+                <i class="el-icon-s-custom"></i>
+              </div>
+              <div class="footer_text">我的</div>
+            </div>
+          <!-- </router-link> -->
           </div>
-          <div class="footer_text active">首页</div>
         </div>
-        <div class="footer_item" @click="toSocial">
-          <div class="footer_icon">
-            <i class="el-icon-s-order"></i>
-          </div>
-          <div class="footer_text">社保</div>
-        </div>
-        <div class="footer_item" @click="toCal">
-          <div class="footer_icon">
-            <i class="el-icon-s-platform"></i>
-          </div>
-          <div class="footer_text">计算器</div>
-        </div>
-        <!-- <router-link> -->
-        <div class="footer_item" @click="tomy()">
-          <div class="footer_icon">
-            <i class="el-icon-s-custom"></i>
-          </div>
-          <div class="footer_text">我的</div>
-        </div>
-        <!-- </router-link> -->
       </div>
     </div>
   </div>
@@ -145,7 +151,7 @@
 import Vue from "vue";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-import App from "../App.vue";
+// import App from "./App.vue";
 import axios from "axios";
 // import my from './components/my.vue'
 Vue.use(ElementUI);
@@ -248,28 +254,9 @@ export default {
       // this.$refs.newsbox.style.transfrom = `translateY(-30*${num}px)`
       // },2000)
     },
-    tomy() {
-      let Authorization = localStorage.getItem('Authorization');
-      if(Authorization){
-        this.$router.push({path: "/sheBao/my/reg" });
-      }else{
-         this.$router.push({path: "/sheBao/my/login" });
-      }
-      
-    },
-    toCal() {
-      this.$router.push({ name: "cal", path: "/cal" });
-    },
-    toIndex(){
-      this.$router.push({
-        name:'sheBao',path:'/sheBao'
-      })
-    },
-    toSocial(){
-      this.$router.push({
-        name:'social',path:'/sheBao/social'
-      })
-    }
+    // tomy(){
+    //   this.$router.push({name:'my',path:'/my'})
+    // }
   },
   mounted() {
     let newsbox = document.getElementsByClassName("newsbox")[0];
@@ -607,36 +594,36 @@ li {
           }
         }
       }
-    }
-    
-  }
-  .footer {
-      border-top: 1px solid #fcf4f4;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: 50px;
-      background: #fff;
-      .footer_list {
-        height: 100%;
-        display: flex;
-        justify-content: space-around;
-        .footer_item {
-          width: 25%;
+      .footer {
+        border-top: 1px solid #fcf4f4;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 50px;
+        background: #fff;
+        .footer_list {
           height: 100%;
-          text-align: center;
-          font-size: 0.8rem;
-          color: #7d7e80;
-          .footer_icon {
-            margin: 0.3rem 0;
+          display: flex;
+          justify-content: space-around;
+          .footer_item{
+            width: 25%;
+            height: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #7d7e80;
+            .footer_icon{
+              margin: 0.3rem 0;
+            }
           }
-        }
-        .active {
-          color: #f97a2e;
+          .active{
+        color: #f97a2e;
+            
+          }
         }
       }
     }
+  }
 }
 </style>

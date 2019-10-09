@@ -1,13 +1,12 @@
 <!--
  * @Description: In User Settings Edit
  * @Author: your name
- * @Date: 2019-09-30 09:45:18
- * @LastEditTime: 2019-10-09 15:38:23
+ * @Date: 2019-10-08 19:15:25
+ * @LastEditTime: 2019-10-08 19:19:23
  * @LastEditors: Please set LastEditors
  -->
 <template>
-  <div id="app">
-    <!-- <router-view> -->
+  <div id="#app">
     <div class="index">
       <header class="bar bar-nav">
         <h1 class="title">桔子保</h1>
@@ -108,195 +107,15 @@
         </div>
       </div>
     </div>
-    <!-- </router-view> -->
-    <div class="footer">
-      <div class="footer_list">
-        <div class="footer_item" @click="toIndex">
-          <div class="footer_icon">
-            <i class="el-icon-s-home"></i>
-          </div>
-          <div class="footer_text active">首页</div>
-        </div>
-        <div class="footer_item" @click="toSocial">
-          <div class="footer_icon">
-            <i class="el-icon-s-order"></i>
-          </div>
-          <div class="footer_text">社保</div>
-        </div>
-        <div class="footer_item" @click="toCal">
-          <div class="footer_icon">
-            <i class="el-icon-s-platform"></i>
-          </div>
-          <div class="footer_text">计算器</div>
-        </div>
-        <!-- <router-link> -->
-        <div class="footer_item" @click="tomy()">
-          <div class="footer_icon">
-            <i class="el-icon-s-custom"></i>
-          </div>
-          <div class="footer_text">我的</div>
-        </div>
-        <!-- </router-link> -->
-      </div>
-    </div>
   </div>
 </template>
 <script>
-import Vue from "vue";
-import ElementUI from "element-ui";
-import "element-ui/lib/theme-chalk/index.css";
-import App from "../App.vue";
-import axios from "axios";
-// import my from './components/my.vue'
-Vue.use(ElementUI);
-export default {
-  data() {
-    return {
-      bannerUrl: [
-        require("../assets/img/banner1.png"),
-        require("../assets/img/banner2.png"),
-        require("../assets/img/banner3.png")
-      ],
-      orderList: [],
-      transform: "",
-      service: [
-        {
-          service_img: require("../assets/img/payback.png"),
-          title: "补缴社保"
-        },
-        {
-          service_img: require("../assets/img/fund.png"),
-          title: "补缴公积金"
-        },
-        {
-          service_img: require("../assets/img/server.png"),
-          title: "增值服务"
-        },
-        {
-          service_img: require("../assets/img/movesocial.png"),
-          title: "社保转移"
-        },
-        {
-          service_img: require("../assets/img/movefund.png"),
-          title: "公积金转移"
-        }
-      ],
-      interpertaion: [
-        {
-          img_url: require("../assets/img/pocail1.png"),
-          spanContent: "看病买药"
-        },
-        {
-          img_url: require("../assets/img/pocail2.png"),
-          spanContent: "买房限购"
-        },
-        {
-          img_url: require("../assets/img/pocail3.png"),
-          spanContent: "买车摇号"
-        },
-        {
-          img_url: require("../assets/img/pocail4.png"),
-          spanContent: "养老生活"
-        },
-        {
-          img_url: require("../assets/img/pocail5.png"),
-          spanContent: "产检生育"
-        },
-        {
-          img_url: require("../assets/img/pocail6.png"),
-          spanContent: "积分落户"
-        },
-        {
-          img_url: require("../assets/img/pocail7.png"),
-          spanContent: "孩子上学"
-        },
-        {
-          img_url: require("../assets/img/pocail8.png"),
-          spanContent: "异地高考"
-        }
-      ],
-      guarantee: [
-        {
-          img_url: require("../assets/img/compliance.png"),
-          p1: "资质合规",
-          p2: "人社部认证许可正规专业服务平台"
-        },
-        {
-          img_url: require("../assets/img/compliance1.png"),
-          p1: "资金安全",
-          p2: "第三方银行全程监管社保款去向"
-        },
-        {
-          img_url: require("../assets/img/compliance2.png"),
-          p1: "专业服务",
-          p2: "资深社保专家急速响应100%在线服务"
-        },
-        {
-          img_url: require("../assets/img/compliance3.png"),
-          p1: "高效便捷",
-          p2: "全程在线自助操作，轻松三部完成参保"
-        }
-      ]
-    };
-  },
-  methods: {
-    newsBanner: function() {
-      // console.log(this.$refs.newsbox)
-      // let num = 0;
-      // setInterval(()=>{
-      //   num++;
-      // this.$refs.newsbox.style.transfrom = `translateY(-30*${num}px)`
-      // },2000)
-    },
-    tomy() {
-      let Authorization = localStorage.getItem('Authorization');
-      if(Authorization){
-        this.$router.push({path: "/sheBao/my/reg" });
-      }else{
-         this.$router.push({path: "/sheBao/my/login" });
-      }
-      
-    },
-    toCal() {
-      this.$router.push({ name: "cal", path: "/cal" });
-    },
-    toIndex(){
-      this.$router.push({
-        name:'sheBao',path:'/sheBao'
-      })
-    },
-    toSocial(){
-      this.$router.push({
-        name:'social',path:'/sheBao/social'
-      })
-    }
-  },
-  mounted() {
-    let newsbox = document.getElementsByClassName("newsbox")[0];
-
-    // let num = 0;
-    //   setInterval(()=>{
-    //     num++;
-    //     this.transform = `translateY(-30*${num}px)`;
-    //     console.log(this.transform);
-    //   },2000)
-  },
-  created() {
-    let api = "http://www.jzbshebao.cn/app/index/rollOrders";
-    axios.get(api).then(res => {
-      this.orderList = res.data.data;
-      console.log(res);
-    });
-
-    this.newsBanner();
-  }
-};
+export default {};
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 ul,
 li {
@@ -608,35 +427,6 @@ li {
         }
       }
     }
-    
   }
-  .footer {
-      border-top: 1px solid #fcf4f4;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: 50px;
-      background: #fff;
-      .footer_list {
-        height: 100%;
-        display: flex;
-        justify-content: space-around;
-        .footer_item {
-          width: 25%;
-          height: 100%;
-          text-align: center;
-          font-size: 0.8rem;
-          color: #7d7e80;
-          .footer_icon {
-            margin: 0.3rem 0;
-          }
-        }
-        .active {
-          color: #f97a2e;
-        }
-      }
-    }
 }
 </style>
