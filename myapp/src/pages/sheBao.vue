@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-30 09:45:18
- * @LastEditTime: 2019-10-09 15:38:23
+ * @LastEditTime: 2019-10-10 16:22:39
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -117,11 +117,19 @@
           </div>
           <div class="footer_text active">首页</div>
         </div>
-        <div class="footer_item" @click="toSocial">
+        <div class="footer_item" @click="toList">
           <div class="footer_icon">
             <i class="el-icon-s-order"></i>
           </div>
-          <div class="footer_text">社保</div>
+          <div class="footer_text">列表页</div>
+        </div>
+        <div class="footer_item" @click="toCart">
+          <el-badge :value='cartLength' class="item">
+          <div class="footer_icon">
+            <i class="el-icon-shopping-cart-1"></i>
+          </div>
+          </el-badge>
+          <div class="footer_text">购物车</div>
         </div>
         <div class="footer_item" @click="toCal">
           <div class="footer_icon">
@@ -239,6 +247,11 @@ export default {
       ]
     };
   },
+  computed:{
+    cartLength(){
+      return this.$store.getters.cartLength;
+    }
+  },
   methods: {
     newsBanner: function() {
       // console.log(this.$refs.newsbox)
@@ -249,13 +262,13 @@ export default {
       // },2000)
     },
     tomy() {
-      let Authorization = localStorage.getItem('Authorization');
-      if(Authorization){
-        this.$router.push({path: "/sheBao/my/reg" });
-      }else{
-         this.$router.push({path: "/sheBao/my/login" });
-      }
+       this.$router.push({
+        name:'my',path:'/sheBao/my'
+      })
       
+    },
+    toCart(){
+this.$router.push({name:'cart',path:"/sheBao/cart"})
     },
     toCal() {
       this.$router.push({ name: "cal", path: "/cal" });
@@ -265,10 +278,11 @@ export default {
         name:'sheBao',path:'/sheBao'
       })
     },
-    toSocial(){
+     toList() {
       this.$router.push({
-        name:'social',path:'/sheBao/social'
-      })
+        name: "list",
+        path: "/sheBao/list"
+      });
     }
   },
   mounted() {

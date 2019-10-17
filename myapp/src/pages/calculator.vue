@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-10-08 16:07:58
- * @LastEditTime: 2019-10-09 15:38:14
+ * @LastEditTime: 2019-10-10 16:22:04
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -34,7 +34,7 @@
             <div class="calculatoritem_left">请选择社保类型</div>
             <div class="calculatoritem_right">
               <i class="el-icon-caret-bottom"></i>
-            <el-button
+              <el-button
                 @click="drawer = true"
                 type="default"
                 style="width:100%"
@@ -69,33 +69,32 @@
     </div>
 
     <el-drawer
-      title=""
+      title
       :visible.sync="drawer"
       :direction="direction"
       :before-close="handleClose"
       class="city_con"
-       
     >
       <span>
-          <div class="van-picker">
-              <div class="van-top">
-                  <div class="van-cancel">取消</div>
-                  <div class="van-title">城市</div>
-                  <div class="van-confirm">确定</div>
-              </div>
-              <div class="van-body" v-for="item in cityData" :key="item.id">
-                  <div class="van-body-left">
-                      <ul class="wrapper-list">
-                          <li class="wrapper-item">{{item.area_name}}</li>
-                      </ul>
-                  </div>
-                  <div class="van-body-right">
-                      <ul class="city_list">
-                          <li class="city_item" v-for="city in item.item" :key="city.id">{{city.area_name}}</li>
-                      </ul>
-                  </div>
-              </div>
+        <div class="van-picker">
+          <div class="van-top">
+            <div class="van-cancel">取消</div>
+            <div class="van-title">城市</div>
+            <div class="van-confirm">确定</div>
           </div>
+          <div class="van-body" v-for="item in cityData" :key="item.id">
+            <div class="van-body-left">
+              <ul class="wrapper-list">
+                <li class="wrapper-item">{{item.area_name}}</li>
+              </ul>
+            </div>
+            <div class="van-body-right">
+              <ul class="city_list">
+                <li class="city_item" v-for="city in item.item" :key="city.id">{{city.area_name}}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </span>
     </el-drawer>
     <div class="footer">
@@ -106,15 +105,23 @@
           </div>
           <div class="footer_text">首页</div>
         </div>
-        <div class="footer_item" @click="toSocial">
+        <div class="footer_item" @click="toList">
           <div class="footer_icon">
             <i class="el-icon-s-order"></i>
           </div>
-          <div class="footer_text">社保</div>
+          <div class="footer_text">列表页</div>
+        </div>
+        <div class="footer_item" @click="toCart">
+          <el-badge :value="cartLength" class="item">
+            <div class="footer_icon">
+              <i class="el-icon-s-platform"></i>
+            </div>
+          </el-badge>
+          <div class="footer_text">购物车</div>
         </div>
         <div class="footer_item active" @click="toCal">
           <div class="footer_icon">
-            <i class="el-icon-s-platform"></i>
+            <i class="el-icon-shopping-cart-1"></i>
           </div>
           <div class="footer_text">计算器</div>
         </div>
@@ -136,8 +143,13 @@ export default {
     return {
       drawer: false,
       direction: "btt",
-      cityData:[]
+      cityData: []
     };
+  },
+  computed: {
+    cartLength() {
+      return this.$store.getters.cartLength;
+    }
   },
   methods: {
     handleClose(done) {
@@ -147,19 +159,16 @@ export default {
         })
         .catch(_ => {});
     },
-    toSocial(){
+    toList() {
       this.$router.push({
-        path:'/sheBao/social'
-      })
+        name: "list",
+        path: "/sheBao/list"
+      });
     },
-     tomy() {
-      let Authorization = localStorage.getItem('Authorization');
-      if(Authorization){
-        this.$router.push({path: "/sheBao/my/reg" });
-      }else{
-         this.$router.push({path: "/sheBao/my/login" });
-      }
-      
+    tomy() {
+       this.$router.push({
+        name:'my',path:'/sheBao/my'
+      })
     },
     toCal() {
       this.$router.push({ name: "cal", path: "/cal" });
@@ -170,22 +179,21 @@ export default {
         path: "/sheBao"
       });
     },
-    getCityData(){
-        // console.log(this.$axios);
-        let api =  'http://www.jzbshebao.cn/app/index/getCity';
-        this.$axios.get(api).then(res=>{
-            this.cityData = res.data.data;
-         
-        })
+    toCart() {
+      this.$router.push({ name: "cart", path: "/sheBao/cart" });
+    },
+    getCityData() {
+      // console.log(this.$axios);
+      let api = "http://www.jzbshebao.cn/app/index/getCity";
+      this.$axios.get(api).then(res => {
+        this.cityData = res.data.data;
+      });
     }
   },
-  mounted(){
-      this.getCityData();
-     
+  mounted() {
+    this.getCityData();
   },
-  created(){
-      
-  }
+  created() {}
 };
 </script>
 <style lang="scss" scoped>
@@ -235,7 +243,7 @@ body {
         }
 
         .calculator-select {
-            position: relative;
+          position: relative;
           width: 100%;
           height: 2rem;
           line-height: 2rem;
@@ -254,23 +262,22 @@ body {
             left: 0;
             right: 0;
             opacity: 0;
-            }
-            .calculatoritem_left {
-              padding-left: 0.6rem;
-              width: 92%;
-              line-height: 1.75rem;
-            }
-            .calculatoritem_right {
-              z-index: 1;
-              width: 8%;
-              text-align: center;
-              border-top-right-radius: 5px;
-              border-bottom-right-radius: 5px;
-              color: #fff;
-              font-size: 1.2rem;
-              background: rgb(218, 215, 215);
-            }
-          
+          }
+          .calculatoritem_left {
+            padding-left: 0.6rem;
+            width: 92%;
+            line-height: 1.75rem;
+          }
+          .calculatoritem_right {
+            z-index: 1;
+            width: 8%;
+            text-align: center;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            color: #fff;
+            font-size: 1.2rem;
+            background: rgb(218, 215, 215);
+          }
         }
         .calculator-input {
           width: 100%;
@@ -365,64 +372,64 @@ body {
     }
   }
 }
-  .city_con{
-        .van-picker{
-          .van-top{
-              height: 44px;
-              display: flex;
-              justify-content: space-between;
-              line-height: 44px;
-              .van-cancel{
-                  font-size: 0.6rem;
-                  color: #666;
-              }
-              .van-title{
-                  color: #444;
-                  font-size: 1rem;
-              }
-              .van-confirm{
-                  color: #ee9746;
-                  font-size: 0.6rem;
-              }
+.city_con {
+  .van-picker {
+    .van-top {
+      height: 44px;
+      display: flex;
+      justify-content: space-between;
+      line-height: 44px;
+      .van-cancel {
+        font-size: 0.6rem;
+        color: #666;
+      }
+      .van-title {
+        color: #444;
+        font-size: 1rem;
+      }
+      .van-confirm {
+        color: #ee9746;
+        font-size: 0.6rem;
+      }
+    }
+    .van-body {
+      width: 100%;
+      display: flex;
+      .van-body-left {
+        width: 40%;
+        text-align: center;
+        overflow: auto;
+        .wrapper-list {
+          line-height: 44px;
+          .wrapper-item {
+            height: 44px;
+            font-size: 1px;
+            padding: 0 5px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
-        .van-body{
-            width: 100%;
-            display: flex;
-            .van-body-left{
-                width: 40%;
-                text-align: center;
-                overflow: auto;
-                .wrapper-list{
-                    line-height: 44px;
-                    .wrapper-item{
-                        height: 44px;
-                        font-size: 1px;
-                        padding: 0 5px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                    }
-                }
-            }
-            .van-body-right{
-                width: 60%;
-                text-align: center;
-                overflow: auto;
-                font-size: 16px;
-                .city_list{
-                    line-height: 44px;
-                    .city_item{
-                        height: 44px;
-                        font-size: 1rem;
-                        padding: 0 5px;
-                        color: #000;
-                         overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                    }
-                }
-            }
         }
       }
+      .van-body-right {
+        width: 60%;
+        text-align: center;
+        overflow: auto;
+        font-size: 16px;
+        .city_list {
+          line-height: 44px;
+          .city_item {
+            height: 44px;
+            font-size: 1rem;
+            padding: 0 5px;
+            color: #000;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+    }
   }
+}
 </style>

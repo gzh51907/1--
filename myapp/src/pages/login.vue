@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-10-09 13:59:49
- * @LastEditTime: 2019-10-09 15:12:40
+ * @LastEditTime: 2019-10-10 15:31:52
  * @LastEditors: Please set LastEditors
  -->
 <!--
@@ -40,10 +40,13 @@
         <el-form-item label="密码" prop="password">
           <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
         </el-form-item>
-    
+
         <el-form-item>
-          <el-checkbox label="七天免登陆" name="type" v-model="ruleForm.mdl" ></el-checkbox>
-          <router-link to="/sheBao/my/reg" style="color:#f97a2e; text-align:center; display:inline-block;">
+          <el-checkbox label="七天免登陆" name="type" v-model="ruleForm.mdl"></el-checkbox>
+          <router-link
+            to="/sheBao/my/reg"
+            style="color:#f97a2e; text-align:center; display:inline-block;"
+          >
             <div class="regbox">
               <p>点此注册?</p>
             </div>
@@ -64,11 +67,19 @@
           </div>
           <div class="footer_text">首页</div>
         </div>
-        <div class="footer_item">
+        <div class="footer_item" @click="toList">
           <div class="footer_icon">
             <i class="el-icon-s-order"></i>
           </div>
-          <div class="footer_text">社保</div>
+          <div class="footer_text">列表页</div>
+        </div>
+        <div class="footer_item" @click="toCart">
+          <el-badge :value="cartLength" class="item">
+            <div class="footer_icon">
+              <i class="el-icon-shopping-cart-1"></i>
+            </div>
+          </el-badge>
+          <div class="footer_text">购物车</div>
         </div>
         <div class="footer_item" @click="toCal">
           <div class="footer_icon">
@@ -113,7 +124,7 @@ export default {
       ruleForm: {
         username: "",
         password: "",
-        mdl:true
+        mdl: true
       },
       rules: {
         password: [{ validator: validatePassword, trigger: "blur" }],
@@ -121,30 +132,39 @@ export default {
       }
     };
   },
+  computed:{
+    cartLength(){
+      return this.$store.getters.cartLength;
+    }
+  },
   methods: {
     submitForm(formName) {
       console.log(formName);
       this.$refs[formName].validate(async valid => {
         if (valid) {
           //发起ajax请求，
-          let { username, password,mdl } = this.ruleForm;
+          let { username, password, mdl } = this.ruleForm;
           let { data } = await this.$axios.get(
-            "http://localhost:4200/user/login",{
-           params: {
-              username,
-              password,
-              mdl
-            }}
+            "http://localhost:4200/user/login",
+            {
+              params: {
+                username,
+                password,
+                mdl
+              }
+            }
           );
           console.log("data:", data);
           if (data.code === 1) {
             console.log(this.$router);
+            this.$store.commit('login',{username,Authorization:data.data});
             this.$router.replace({
-              path: this.$route.params.path,
+              path: '/sheBao/my',
               params: { username },
               query: { username }
             });
-            localStorage.setItem('Authorization',data.data)
+            
+            // localStorage.setItem("Authorization", data.data);
           } else {
             alert("用户名或密码不正确");
           }
@@ -156,6 +176,12 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    toCart() {
+      this.$router.push({ name: "cart", path: "/sheBao/cart" });
+    },
+    toList() {
+      this.$router.push({ name: "list", path: "/sheBao/list" });
     },
     tomy() {
       this.$router.push({ name: "reg", path: "/my/reg" });
@@ -169,11 +195,9 @@ export default {
         path: "/sheBao"
       });
     },
-    toPrev(){
-        this.$router.push({
-            path:this.$route.path
-        })
-        // console.log(this.$route);
+    toPrev() {
+      this.$router.go(-1);
+      // console.log(this.$route);
     }
   }
 };

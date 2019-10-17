@@ -2,35 +2,38 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-10-09 15:27:44
- * @LastEditTime: 2019-10-09 18:49:52
+ * @LastEditTime: 2019-10-10 11:20:16
  * @LastEditors: Please set LastEditors
  -->
 <template>
   <div id="app">
     <div class="content">
-      <div class="head">
-        <div class="title">缴社保</div>
-        <div class="icon">
-          <img src="../assets/img/icon_1.png" alt />
-        </div>
-      </div>
-      <div class="con">
-        <el-steps :space="200" :active="1" finish-status="success">
-          <el-step title="参保套餐"></el-step>
-          <el-step title="参保方案"></el-step>
-          <el-step title="确认订单"></el-step>
-        </el-steps>
-        <div class="insured">
-            <div class="participants">
-                <div class="participants_left">
-                    <span class="part_icon">
-                        <img src="../assets/img/part_icon.png" alt="">
-                        </span>
-                        <span>参保人</span>
-                </div>
-                <div class="participants_right"></div>
+      <el-carousel height="200px">
+        <el-carousel-item v-for="item in listdata" :key="item.data">
+          <img :src="item.image" style="width:100%" />
+        </el-carousel-item>
+      </el-carousel>
+      <div v-for="category in recommend" :key="category.title">
+        <h4 style="font-size:1rem; color: #f97a2e;">{{category.title}}</h4>
+        <el-row :gutter="20">
+          <el-col
+            :span="12"
+            style="height:300px;"
+            v-for="li in category.item"
+            :key="li.goods_id"
+            @click.native="goto(li.goods_id)"
+          >
+            <img style="width:10rem;" :src="li.goods_image" alt />
+            <p class="goods_name" style>{{li.goods_name}}</p>
+            <div class="goods_price">
+              <span
+                class="old_price"
+                style="color:#444;text-decoration: line-through;"
+              >￥{{li.goods_price}}</span>
+              <span class="now_price" style="color:red">￥{{li.goods_promotion_price}}</span>
             </div>
-        </div>
+          </el-col>
+        </el-row>
       </div>
     </div>
     <div class="footer">
@@ -41,11 +44,19 @@
           </div>
           <div class="footer_text">首页</div>
         </div>
-        <div class="footer_item active" @click="toSocial">
+        <div class="footer_item active" @click="toList">
           <div class="footer_icon">
             <i class="el-icon-s-order"></i>
           </div>
-          <div class="footer_text">社保</div>
+          <div class="footer_text">列表页</div>
+        </div>
+        <div class="footer_item" @click="toCart">
+          <el-badge :value="cartLength" class="item">
+            <div class="footer_icon">
+              <i class="el-icon-shopping-cart-1"></i>
+            </div>
+          </el-badge>
+          <div class="footer_text">购物车</div>
         </div>
         <div class="footer_item" @click="toCal">
           <div class="footer_icon">
@@ -68,7 +79,15 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      recommend: [],
+      listdata: []
+    };
+  },
+  computed: {
+    cartLength() {
+      return this.$store.getters.cartLength;
+    }
   },
   methods: {
     tomy() {
@@ -88,12 +107,31 @@ export default {
         path: "/sheBao"
       });
     },
-    toSocial() {
+    toList() {
       this.$router.push({
-        name: "social",
-        path: "/sheBao/social"
+        name: "list",
+        path: "/sheBao/list"
+      });
+    },
+    toCart() {
+      this.$router.push({ name: "cart", path: "/sheBao/cart" });
+    },
+    goto(id) {
+      // console.log(1)
+      this.$router.push({
+        path: `/sheBao/goods/${id}`
       });
     }
+  },
+  async created() {
+    let {
+      data: { datas }
+    } = await this.$axios.get("https://www.nanshig.com/mobile/index.php");
+    this.listdata = datas[0].adv_list.item;
+    this.recommend = datas.slice(1).map(item => {
+      return item.goods; //提取数据
+    });
+    // console.log(this.recommend);
   }
 };
 </script>
@@ -111,42 +149,21 @@ export default {
   height: 100%;
   width: 100%;
   .content {
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 0.8rem;
     width: 100%;
     height: calc(100% - 50px);
     background: #f2f2f2;
-    .head {
-      height: 46px;
-      line-height: 46px;
-      text-align: center;
-      position: fixed;
-      z-index: 999;
-      top: 0;
-      left: 0;
-      right: 0;
-      .icon {
-        position: absolute;
-        display: inline-block;
-        right: 16px;
-        top: 0;
-        img {
-          height: 1.3rem;
-          width: 1.4rem;
-        }
+    .el_row {
+      .goods_name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 0.5rem;
+        text-decoration: line-through;
       }
     }
-    .con{
-        width: 100%;
-        top: 46px;
-        position: absolute;
-        padding: 0 2rem;
-        .el-steps{
-            width: 100%;
-            .el-step{
-                // text-align: center;
-            }
-        }
-    }
-    
   }
   .footer {
     border-top: 1px solid #fcf4f4;

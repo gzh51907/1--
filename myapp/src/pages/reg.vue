@@ -2,7 +2,7 @@
  * @Description: In User Settings Ed
  * @Author: your name
  * @Date: 2019-10-08 16:06:11
- * @LastEditTime: 2019-10-09 15:13:55
+ * @LastEditTime: 2019-10-10 11:21:49
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -11,10 +11,10 @@
       <div class="head_bar" @click="toPrev">
         <img src="../assets/img/head_left.png" alt />
       </div>
-      <router-link to='/sheBao/my/login'>
-      <div class="loginbox">
+      <router-link to="/sheBao/my/login">
+        <div class="loginbox">
           <p>已有账号？点此登录</p>
-      </div>
+        </div>
       </router-link>
     </div>
     <div class="form_box">
@@ -43,7 +43,7 @@
         </el-form-item>
         <!-- <el-form-item>
           <el-checkbox label="七天免登陆" name="type" checked></el-checkbox>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item style="margin-top:3rem;">
           <el-button type="primary" @click="submitForm('ruleForm')" size="large" class="loginbtn">注册</el-button>
           <el-button type="danger" @click="resetForm('ruleForm')" class="resetbtn">重置</el-button>
@@ -58,11 +58,19 @@
           </div>
           <div class="footer_text">首页</div>
         </div>
-        <div class="footer_item">
+        <div class="footer_item" @click="toList">
           <div class="footer_icon">
             <i class="el-icon-s-order"></i>
           </div>
-          <div class="footer_text">社保</div>
+          <div class="footer_text">列表页</div>
+        </div>
+        <div class="footer_item" @click="toCart">
+          <el-badge :value="cartLength" class="item">
+            <div class="footer_icon">
+              <i class="el-icon-shopping-cart-1"></i>
+            </div>
+          </el-badge>
+          <div class="footer_text">购物车</div>
         </div>
         <div class="footer_item" @click="toCal">
           <div class="footer_icon">
@@ -137,6 +145,11 @@ export default {
       }
     };
   },
+  computed:{
+    cartLength(){
+      return this.$store.getters.cartLength;
+    }
+  },
   methods: {
     submitForm(formName) {
       console.log(formName);
@@ -153,7 +166,6 @@ export default {
           );
           console.log("data:", data);
           if (data.code === 1) {
-            
             console.log(this.$router);
             this.$router.replace({
               path: this.$router.params.path,
@@ -172,8 +184,17 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+    toList() {
+      this.$router.push({
+        name: "list",
+        path: "/sheBao/list"
+      });
+    },
     tomy() {
       this.$router.push({ name: "reg", path: "/my/reg" });
+    },
+    toCart() {
+      this.$router.push({ name: "cart", path: "/sheBao/cart" });
     },
     toCal() {
       this.$router.push({ name: "cal", path: "/cal" });
@@ -184,10 +205,8 @@ export default {
         path: "/sheBao"
       });
     },
-    toPrev(){
-        this.$router.push({
-            path:this.$route.path
-        })
+    toPrev() {
+      this.$router.go(-1);
     }
   }
 };
@@ -213,7 +232,7 @@ li {
     left: 0;
     right: 0;
     background: #fff;
-    display:flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     .head_bar {
@@ -226,17 +245,16 @@ li {
         height: 1rem;
       }
     }
-    a{
-        color:#f97a2e;
+    a {
+      color: #f97a2e;
     }
-    .loginbox{
-        width: 5rem;
-        p{
-            color: #f97a2e;
-            font-size: 0.8rem;
-        }
+    .loginbox {
+      width: 5rem;
+      p {
+        color: #f97a2e;
+        font-size: 0.8rem;
+      }
     }
-    
   }
   .form_box {
     width: 100%;
